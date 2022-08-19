@@ -26,4 +26,37 @@ class UserController extends Controller
             'title' => $data['title']
         ]);
     }
+
+    public function create()
+    {
+        return view('pages.user.form', [
+            'title' => 'Create User'
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $result = $this->userService->addUser($request->all());
+
+        return redirect('/user')->withSuccess($result['message']);
+    }
+
+    public function edit($user_id)
+    {
+        $data = $this->userService->getUserById($user_id);
+        return view('pages.user.form', [
+            'data' => $data['data'],
+            'title' => 'Edit User'
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        $data = collect(request()->all())->filter()->all();
+        // dd($data);
+
+        $result = $this->userService->updateUser($data);
+
+        return redirect('user')->withSuccess($result['message']);
+    }
 }

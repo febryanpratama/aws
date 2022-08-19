@@ -82,7 +82,7 @@
                 <td></td>
                 <td></td>
             </tr>
-            <tr>
+            {{-- <tr>
                 <td style="border: none"></td>
                 <td style="border: none"></td>
                 <td style="border: none"></td>
@@ -93,7 +93,7 @@
                 <td style="border: none"></td>
                 <td style="border: none"></td>
                 <td class="py-2"></td>
-            </tr>
+            </tr> --}}
         </tfoot>
     </table>
     <div style="page-break-before: always;"></div>
@@ -106,7 +106,7 @@
             <tr>
                 <td>
                     <div style="height: 100px; border-bottom: 1px solid rgba(0,0,0,.2); max-width: 150px">
-                        <img src="{{ $sign }}" width="99" height="99">
+                        {{-- <img src="{{ $sign }}" width="99" height="99"> --}}
                     </div>
                 </td>
                 <td>

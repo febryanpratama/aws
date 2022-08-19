@@ -60,6 +60,10 @@ Route::middleware('CheckLevel:admin')->group(function () {
         'prefix' => 'user',
     ], function () {
         Route::get('/', [UserController::class, 'index'])->name('user.index');
+        Route::get('create', [UserController::class, 'create'])->name('user.create');
+        Route::get('/{user_id}/edit', [UserController::class, 'edit'])->name('user.edit');
+        Route::post('/store', [UserController::class, 'store'])->name('user.store');
+        Route::post('/{user_id}/update', [UserController::class, 'update'])->name('user.update');
     });
 
 
