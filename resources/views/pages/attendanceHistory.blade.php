@@ -14,15 +14,26 @@
                                     <i class="feather icon-map-pin mr-1"></i>
                                     Your Attendance History
                                 </div>
-                                <form method="post" action="{{ route('attendanceOut') }}">
-                                    @csrf
-                                    <input type="hidden" id="latitude" name="latitude">
-                                    <input type="hidden" id="longitude" name="longitude">
-                                    <button type="submit" name="submit" class="btn btn-danger btn-sm">
-                                        <i class="feather icon-map-pin mr-1"></i>
-                                        Exit Work
-                                    </button>
-                                </form>
+                                <div class="d-flex">
+                                    <form method="post" action="{{ route('attendanceIn') }}">
+                                        @csrf
+                                        <input type="hidden" id="latitude_in" name="latitude">
+                                        <input type="hidden" id="longitude_in" name="longitude">
+                                        <button type="submit" name="submit" class="btn btn-primary btn-sm mr-2">
+                                            <i class="feather icon-map-pin mr-1"></i>
+                                            Check In
+                                        </button>
+                                    </form>
+                                    <form method="post" action="{{ route('attendanceOut') }}">
+                                        @csrf
+                                        <input type="hidden" id="latitude" name="latitude">
+                                        <input type="hidden" id="longitude" name="longitude">
+                                        <button type="submit" name="submit" class="btn btn-danger btn-sm">
+                                            <i class="feather icon-map-pin mr-1"></i>
+                                            Exit Work
+                                        </button>
+                                    </form>
+                                </div>
                             </h5>
                         </div>
                         <p class="mb-0">GPS-based Website attendance application. Stop leaning on to fingerprint machine and you can track or document it in a simpler, faster way.</p>
@@ -123,5 +134,7 @@
     let longitude = localStorage.getItem('longitude');
     $('#latitude').val(latitude);
     $('#longitude').val(longitude);
+    $('#latitude_in').val(latitude);
+    $('#longitude_in').val(longitude);
 </script>
 @endsection

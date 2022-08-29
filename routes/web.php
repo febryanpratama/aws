@@ -21,6 +21,7 @@ Route::middleware('CheckLevel:user,admin')->group(function () {
     Route::get('fileManager', 'HomeController@fileManager')->name('fileManager');
     Route::get('fileManager/search', 'HomeController@fileManagerSearch')->name('fileManagerSearch');
     Route::get('attendanceHistory', 'HomeController@attendanceHistory')->name('attendanceHistory');
+    Route::post('attendance-in', 'HomeController@attendanceIn')->name('attendanceIn');
     Route::post('attendance-out', 'HomeController@attendanceOut')->name('attendanceOut');
     Route::get('settings', 'HomeController@settings')->name('settings');
     Route::post('fileOrderUpload/{id}', 'HomeController@fileOrderUpload')->name('fileOrderUpload');
