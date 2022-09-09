@@ -38,6 +38,7 @@ class UserService
 
         if ($validator->fails()) {
             # code...
+            // dd($validator->errors());
             return [
                 'status' => false,
                 'message' => $validator->errors()->first(),
@@ -46,6 +47,7 @@ class UserService
 
         $data['password'] = Hash::make($data['password']);
 
+        // dd("ok");
         User::create($data);
 
         $status = true;

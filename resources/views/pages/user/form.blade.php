@@ -64,7 +64,7 @@
                                             <label for="" class="label-control">Email</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="email" class="form-control" name="email" value="{{ $data->email }}" placeholder="mail@mail.com" required>
+                                            <input type="email" class="form-control" name="email" value="{{ @$data->email }}" placeholder="mail@mail.com" required>
                                         </div>
                                     </div>
         
@@ -98,8 +98,8 @@
                                         <div class="col-md-8">
                                             <select name="level" class="form-control" required>
                                                 <option value="" selected disabled> == PILIH == </option>
-                                                <option value="admin" {{ $data->level == 'admin' ? 'selected' : '' }}>Admin</option>
-                                                <option value="user" {{ $data->level == 'user' ? 'selected' : '' }}>User</option>
+                                                <option value="admin" {{ @$data->level == 'admin' ? 'selected' : '' }}>Admin</option>
+                                                <option value="user" {{ @$data->level == 'user' ? 'selected' : '' }}>User</option>
                                             </select>
                                         </div>
                                     </div>

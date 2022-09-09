@@ -29,13 +29,17 @@ class UserController extends Controller
 
     public function create()
     {
+        // $data = $this->userService->createUser();
         return view('pages.user.form', [
-            'title' => 'Create User'
+            'title' => 'Create User',
+            'data' => null,
         ]);
     }
 
     public function store(Request $request)
     {
+        // dd($request->all());
+        // 
         $result = $this->userService->addUser($request->all());
 
         return redirect('/user')->withSuccess($result['message']);
