@@ -78,7 +78,10 @@
             </tr>
             <tr>
                 <td class="text-center py-3" style="line-height: 12px;">Total Calendar Days</td>
-                <td class="text-center">1,36</td>
+                <td class="text-center">
+                    {{-- {{ $data['calculate'] }} --}}
+                    {{ $calculate }}
+                </td>
                 <td></td>
                 <td></td>
             </tr>

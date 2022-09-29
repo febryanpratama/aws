@@ -25,7 +25,10 @@ class WeekController extends Controller
         // dd($year);
 
         // dd(FacadesAuth::user() . "ko");
+        // $cal = cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y'));
 
+
+        // dd($cal);
         $weeks = Week::select("id", "user_id")->where("month", $month)->where("year", $year)->where('user_id', FacadesAuth::user()->id)->orderBy('date_start', 'ASC')->get();
 
         // dd($weeks);
@@ -50,6 +53,14 @@ class WeekController extends Controller
             $data['total_working_days'] = count($data['activities']);
             $data['sign'] = asset('assets/images/user/' . getEsign($user_id));
 
+            $count = WeekActivity::whereIn("week_id", $id)->where("status", "done")->count();
+
+            $real = WeekActivity::whereIn("week_id", $id)->whereIn("status", ["done", "in_progres"])->count();
+
+            // dd($count / $real);
+
+            $data['calculate'] = substr($count / $real, 0, 4);
+
             // dd($data);
             // return $data;
             // return view("pdf.timesheet", $data);
@@ -69,6 +80,7 @@ class WeekController extends Controller
             // )->setPaper('A4', 'landscape');
 
             // return $pdf->stream();
+            // dd($data);
             return $pdf->loadview('pdf.timesheet', $data)->stream();
         }
     }
