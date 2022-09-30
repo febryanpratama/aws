@@ -12,8 +12,11 @@ use App\Models\Notification as Notification;
 use App\Models\FileOrder;
 use App\Models\FileOrderDocument;
 use App\Models\FileOrderReceiver;
+use App\Models\FileSupport;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -192,6 +195,22 @@ class HomeController extends Controller
 
     public function attendanceIn(Request $request)
     {
+        $date_check = Carbon::now()->subDays(1);
+        $findCheckOut = LoginActivity::where("just_date_in", $date_check)->where("user_id", Auth::user()->id)->where("type", "out")->count();
+
+        // dd($findCheckOut);
+        if ($findCheckOut == 0) {
+            # code...
+            $modal = [
+                "modal" => "yes",
+                "modal_title" => "Ups! Failed..",
+                "modal_message" => "You have to check out first!, Contact Admin",
+                "modal_type" => "error",
+            ];
+
+            // return back()->with($modal);
+        }
+
         $data = $request->except('_token');
         $date_now = date("Y-m-d");
         $find = LoginActivity::where("just_date_in", $date_now)->where("user_id", Auth::user()->id)->where("type", "in")->count();
@@ -213,7 +232,7 @@ class HomeController extends Controller
             $modal = [
                 "modal" => "yes",
                 "modal_title" => "Yay! Sucess",
-                "modal_message" => "You are successfully to log off the office!",
+                "modal_message" => "You are successfully to log in the office!",
                 "modal_type" => "success",
             ];
 
@@ -288,7 +307,8 @@ class HomeController extends Controller
     }
     public function fileManager()
     {
-        $data['files'] = File::orderBy('created_at', 'DESC')->get();
+        // $data['files'] = File::orderBy('created_at', 'DESC')->get();
+        $data['files'] = FileSupport::where('is_deleted', null)->orderBy('created_at', 'DESC')->get();
         return view("pages.fileManager", $data);
     }
     public function fileManagerSearch(Request $request)
@@ -522,5 +542,113 @@ class HomeController extends Controller
 
         $modal = ["modal" => "yes", "modal_type" => "success", "modal_title" => "Success!", "modal_message" => "Uplaod file success."];
         return redirect('fileOrder')->with($modal);
+    }
+
+    public function fileSupport(Request $request)
+    {
+        // dd($request->all());
+
+
+        $validator = Validator::make($request->all(), [
+            'filename' => 'required',
+            'description' => 'required',
+            "file" => 'required|mimetypes:text/plain,application/pdf,application/csv,application/excel,application/vnd.ms-excel, application/vnd.msexcel,text/csv, text/anytext, text/plain, text/x-c,text/comma-separated-values,inode/x-empty,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document|max:1000000',
+        ]);
+
+        if ($validator->fails()) {
+
+            dd($validator->errors()->first());
+            $modal = ["modal" => "yes", "modal_type" => "error", "modal_title" => "Failed!", "modal_message" => $validator->errors()->first()];
+            return back()->with($modal);
+        }
+        // dd($request->all());
+
+        if ($request->file('file')) {
+            $file = $request->file('file');
+            $size = $file->getSize();
+            $to_file = 'uploads/files';
+            $name_file = rand(1, 100) . "_" . $file->getClientOriginalName();
+            $file->move($to_file, $name_file);
+
+            FileSupport::create([
+                'file_name' => $request->filename,
+                'description' => $request->description,
+                'file_path' => $name_file,
+            ]);
+            $modal = ["modal" => "yes", "modal_type" => "success", "modal_title" => "Success!", "modal_message" => "Uplaod file success."];
+            return back()->with($modal);
+        }
+
+        $modal = ["modal" => "yes", "modal_type" => "error", "modal_title" => "Failed!", "modal_message" => "File is required."];
+        return redirect('fileOrder')->with($modal);
+
+
+        // return view("pages.fileSupport", $data);
+    }
+
+    public function fileSupportUpdate(Request $request)
+    {
+        // dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'filesupport_id' => 'required|numeric|exists:file_supports,id',
+            'filename' => 'required',
+            'description' => 'required',
+            "file"  => 'mimetypes:text/plain,application/pdf,application/csv,application/excel,application/vnd.ms-excel, application/vnd.msexcel,text/csv, text/anytext, text/plain, text/x-c,text/comma-separated-values,inode/x-empty,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document|max:1000000',
+        ]);
+
+        if ($validator->fails()) {
+
+            // dd($validator->errors()->first());
+            $modal = ["modal" => "yes", "modal_type" => "error", "modal_title" => "Failed!", "modal_message" => $validator->errors()->first()];
+            return back()->with($modal);
+        }
+
+        if ($request->file('file')) {
+            # code...
+            $file = $request->file('file');
+            $size = $file->getSize();
+            $to_file = 'uploads/files';
+            $name_file = rand(1, 100) . "_" . $file->getClientOriginalName();
+            $file->move($to_file, $name_file);
+
+            FileSupport::where('id', $request->filesupport_id)->update([
+                'file_name' => $request->filename,
+                'description' => $request->description,
+                'file_path' => $name_file,
+            ]);
+
+            $modal = ["modal" => "yes", "modal_type" => "success", "modal_title" => "Success!", "modal_message" => "Update Data Success"];
+            return back()->with($modal);
+        }
+
+        FileSupport::where('id', $request->filesupport_id)->update([
+            'file_name' => $request->filename,
+            'description' => $request->description,
+        ]);
+
+        $modal = ["modal" => "yes", "modal_type" => "success", "modal_title" => "Success!", "modal_message" => "Update Data Success"];
+
+        return back()->with($modal);
+    }
+
+    public function fileSupportdelete(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'filesupport_id' => 'required|numeric|exists:file_supports,id',
+        ]);
+
+        if ($validator->fails()) {
+
+            // dd($validator->errors()->first());
+            $modal = ["modal" => "yes", "modal_type" => "error", "modal_title" => "Failed!", "modal_message" => $validator->errors()->first()];
+            return back()->with($modal);
+        }
+
+        FileSupport::where('id', $request->filesupport_id)->update([
+            'is_deleted' => Date('Y-m-d H:i:s'),
+        ]);
+
+        $modal = ["modal" => "yes", "modal_type" => "success", "modal_title" => "Success!", "modal_message" => "Delete Data Success"];
+        return back()->with($modal);
     }
 }
