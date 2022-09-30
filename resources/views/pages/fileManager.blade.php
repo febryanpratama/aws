@@ -106,9 +106,9 @@
                     {{-- {{ dd($files) }} --}}
                     <div class="card-body">
                         <div class="table table-responsive">
-                            <table class="table table-bordered " id="datatable">
+                            <table class="table table-bordered" id="datatable">
                                 <thead class="text-center">
-                                    <tr>
+                                    <tr class="text-center">
                                         <th>No</th>
                                         <th width="20%">File Name</th>
                                         <th width="50%">Description</th>
@@ -121,7 +121,7 @@
                                 <tbody class="text-center">
                                     @foreach ($files as $item=>$key)
                                     <tr>
-                                        <td>1</td>
+                                        <td>{{ $item+1 }}</td>
                                         <td>{{ $key->file_name }}</td>
                                         <td>{{ $key->description }}</td>
                                         <td>
