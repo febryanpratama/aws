@@ -23,7 +23,7 @@
         </div>
 
 
-        <div class="row row-sm">
+        {{-- <div class="row row-sm">
             <div class="col-lg-12 col-xl-12">
                 <form method="get" action="{{ route('fileManagerSearch') }}" class="mb-3">
                     <div class="input-group mb-3">
@@ -82,7 +82,188 @@
                     @endforeach
                 </div>
             </div> <!-- End Row -->
+        </div> --}}
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4>List Data File</h4>
+                            </div>
+                            {{-- {{ dd(Auth::user()->level) }} --}}
+                            @if (Auth::user()->level == 'admin')
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                <i class="feather icon-plus"></i>
+                                Add File
+                            </button>
+                            @endif
+                            {{-- <a href="" class="btn btn-primary btn-sm">
+                            </a> --}}
+                        </div>
+                    </div>
+                    {{-- {{ dd($files) }} --}}
+                    <div class="card-body">
+                        <div class="table table-responsive">
+                            <table class="table table-bordered " id="datatable">
+                                <thead class="text-center">
+                                    <tr>
+                                        <th>No</th>
+                                        <th width="20%">File Name</th>
+                                        <th width="50%">Description</th>
+                                        <th>File</th>
+                                        @if (Auth::user()->level == 'admin')
+                                        <th>Action</th>
+                                        @endif
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                    @foreach ($files as $item=>$key)
+                                    <tr>
+                                        <td>1</td>
+                                        <td>{{ $key->file_name }}</td>
+                                        <td>{{ $key->description }}</td>
+                                        <td>
+                                            <a href="{{ url('uploads/files/'.$key->file_path) }}" target="_blank">
+                                                <div class="badge badge-info"> download</div>
+                                            </a>
+                                        </td>
+                                        @if (Auth::user()->level == 'admin')
+                                        <td>
+                                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#edit{{ $key->id }}">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#hapus{{ $key->id }}">
+                                                <i class="feather icon-trash"></i>
+                                            </button>
+                                        </td>
+                                            
+                                        @endif
+                                    </tr>
+                                    @if (Auth::user()->level == 'admin')
+                                    <div class="modal fade" id="edit{{ $key->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Edit File</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form action="{{ url("filesupport/update") }}" method="POST" enctype="multipart/form-data">
+                                                    @csrf
+                                                    <input type="hidden" name="filesupport_id" value="{{ $key->id }}">
+                                                    <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="" class="control-label">File Name</label>
+                                                                <input type="text" class="form-control" name="filename" value="{{ $key->file_name }}" placeholder="Form Izin Surat CUTI .. ">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="" class="control-label">Description File Name</label>
+                                                                <textarea name="description" class="form-control" cols="10" rows="5">{{ $key->description }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="" class="control-label">File</label>
+                                                                <input type="file" class="form-control" name="file">
+                                                                <small class="text-danger">keep clearly, if document not change</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal fade" id="hapus{{ $key->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Edit File</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form action="{{ url("filesupport/delete") }}" method="POST" enctype="multipart/form-data">
+                                                    @csrf
+                                                    <input type="hidden" name="filesupport_id" value="{{ $key->id }}">
+                                                    <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <p>Apakah anda yakin ingin menghapus dokumen "{{ $key->file_name }}" ? </p>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        
+                                    @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add File</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form action="{{ url("filesupport") }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="control-label">File Name</label>
+                        <input type="text" class="form-control" name="filename" placeholder="Form Izin Surat CUTI .. ">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="control-label">Description File Name</label>
+                        <textarea name="description" class="form-control" cols="10" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="control-label">File</label>
+                        <input type="file" class="form-control" name="file">
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+        </form>
+    </div>
+  </div>
 </div>
 @endsection

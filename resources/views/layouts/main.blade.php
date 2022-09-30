@@ -10,6 +10,8 @@
     <meta name="author" content="Codedthemes" />
     @include('includes.assets')
     @yield('custom-asset')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+
 </head>
 <body class="">
     @if(!Auth::guest())
@@ -22,4 +24,9 @@
 </body>
 @include('includes.scripts')
 @yield('custom-script')
+
+<script>
+    $('#datatable').DataTable();
+
+</script>
 </html>

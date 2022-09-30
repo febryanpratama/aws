@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,6 +28,10 @@ Route::middleware('CheckLevel:user,admin')->group(function () {
     Route::get('settings', 'HomeController@settings')->name('settings');
     Route::post('fileOrderUpload/{id}', 'HomeController@fileOrderUpload')->name('fileOrderUpload');
     Route::post('settings', 'HomeController@settingsPost')->name('settingsPost');
+
+    Route::post('filesupport', [HomeController::class, 'fileSupport'])->name('fileSupport');
+    Route::post('filesupport/update', [HomeController::class, 'fileSupportUpdate'])->name('fileSupportUpdate');
+    Route::post('filesupport/delete', [HomeController::class, 'fileSupportdelete'])->name('fileSupportdelete');
 
     Route::post('settings/esign/save', 'HomeController@esignPost')->name('esignPost');
 
