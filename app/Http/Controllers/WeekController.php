@@ -40,7 +40,7 @@ class WeekController extends Controller
             }
 
             // dd($id);
-            $data['activities'] = WeekActivity::whereIn("week_id", $id)->where("status", "done")->get();
+            $data['activities'] = WeekActivity::whereIn("week_id", $id)->where("status", "done")->orderBy('date_activities', 'ASC')->get();
 
             // dd($data['activities']);
             $data['month'] = $month;
