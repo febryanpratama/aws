@@ -195,21 +195,34 @@ class HomeController extends Controller
 
     public function attendanceIn(Request $request)
     {
-        $date_check = Carbon::now()->subDays(1);
-        $findCheckOut = LoginActivity::where("just_date_in", $date_check)->where("user_id", Auth::user()->id)->where("type", "out")->count();
-
-        // dd($findCheckOut);
-        if ($findCheckOut == 0) {
-            # code...
+        // $date_check = Carbon::now()->subDays(1);
+        $checkout = LoginActivity::where("user_id", Auth::user()->id)->latest()->first();
+        // dd($chekcout->type);
+        if ($checkout->type == "in") {
             $modal = [
                 "modal" => "yes",
                 "modal_title" => "Ups! Failed..",
-                "modal_message" => "You have to check out first!, Contact Admin",
+                "modal_message" => "You are already check in! Contact Admin",
                 "modal_type" => "error",
             ];
-
-            // return back()->with($modal);
+            return Redirect::back()->with($modal);
         }
+
+        // $findCheckOut = LoginActivity::where("just_date_in", $date_check)->where("user_id", Auth::user()->id)->where("type", "out")->count();
+
+        // if ($findCheckOut == 0) {
+        //     dd($findCheckOut);
+        //     # code...
+        //     $modal = [
+        //         "modal" => "yes",
+        //         "modal_title" => "Ups! Failed..",
+        //         "modal_message" => "You have to check out first!, Contact Admin",
+        //         "modal_type" => "error",
+        //     ];
+
+        //     // return back()->with($modal);
+        // }
+        // dd("ok");
 
         $data = $request->except('_token');
         $date_now = date("Y-m-d");
@@ -253,7 +266,7 @@ class HomeController extends Controller
         $find = LoginActivity::where("just_date_in", $date_now)->where("user_id", Auth::user()->id)->where("type", "out")->count();
 
         // 9am = 9pagi
-        if ($find == 0 && time() >= strtotime('3pm')) {
+        if ($find == 0 && time() >= strtotime('5pm')) {
             $platform = Agent::platform();
             $browser = Agent::browser();
             $browser_version = Agent::version($browser);
