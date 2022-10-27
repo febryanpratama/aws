@@ -52,6 +52,7 @@ Route::middleware('CheckLevel:user,admin')->group(function () {
 
     Route::get('weeks', 'WeekController@index')->name('weeks.index');
     Route::get('weeks/timesheet/{month}/{year}', 'WeekController@timesheet')->name('weeks.timesheet');
+    Route::get('weeks/timesheet/{month}/{year}/excel', 'WeekController@timesheetExcel')->name('weeks.timesheetexcel');
     Route::post('weeks/store', 'WeekController@store')->name('weeks.store');
     Route::get('weeks/{id}/edit', 'WeekController@edit')->name('weeks.edit');
     Route::get('weeks/{id}/delete', 'WeekController@destroy')->name('weeks.delete');

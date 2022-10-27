@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TimesheetExport;
 use App\Models\User;
 use App\Models\Week;
 use App\Models\WeekActivity;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Auth;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
+use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 
 class WeekController extends Controller
@@ -82,6 +84,74 @@ class WeekController extends Controller
             // return $pdf->stream();
             // dd($data);
             return $pdf->loadview('pdf.timesheet', $data)->stream();
+        }
+    }
+
+    public function timesheetExcel($month, $year)
+    {
+
+        // dd($year);
+
+        // dd(FacadesAuth::user() . "ko");
+        // $cal = cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y'));
+
+
+        // dd($cal);
+        $weeks = Week::select("id", "user_id")->where("month", $month)->where("year", $year)->where('user_id', FacadesAuth::user()->id)->orderBy('date_start', 'ASC')->get();
+
+        // dd($weeks);
+        if (count($weeks) > 0) {
+            $id = [];
+            foreach ($weeks as $key => $value) {
+                $id[] = $value->id;
+                $user_id = $value->user_id;
+            }
+
+            // dd($id);
+            $data['activities'] = WeekActivity::whereIn("week_id", $id)->where("status", "done")->orderBy('date_activities', 'ASC')->get();
+
+            // dd($data['activities']);
+            $data['month'] = $month;
+            $data['year'] = substr($year, 2, 2);
+            $data['full_year'] = $year;
+            $data['company'] = "PT Alatan Asasta Indonesia (AAI)";
+            $data['project'] = "USDOJ / ICITAP Indonesia";
+            $data['officer'] = getName($user_id);
+            $data['position'] = getJobTitle($user_id);
+            $data['total_working_days'] = count($data['activities']);
+            $data['sign'] = asset('assets/images/user/' . getEsign($user_id));
+
+            $count = WeekActivity::whereIn("week_id", $id)->where("status", "done")->count();
+
+            $real = WeekActivity::whereIn("week_id", $id)->whereIn("status", ["done", "in_progres"])->count();
+
+            // dd($count / $real);
+
+            $data['calculate'] = substr($count / $real, 0, 4);
+
+            // dd($data);
+            // return $data;
+            // return view("pdf.timesheet", $data);
+
+            // $pdf = PDF::getFacadeRoot();
+            // $dompdf = $pdf->getDomPDF();
+            // $dompdf->setHttpContext(stream_context_create([
+            //     'ssl' => [
+            //         'verify_peer' => FALSE,
+            //         'verify_peer_name' => FALSE,
+            //         'allow_self_signed' => TRUE
+            //     ],
+            // ]));
+            // // $pdf = PDF::loadView(
+            // //     'pdf.timesheet',
+            // //     $data
+            // // )->setPaper('A4', 'landscape');
+
+            // // return $pdf->stream();
+            // // dd($data);
+            // return $pdf->loadview('pdf.timesheet', $data)->stream();
+
+            return Excel::download(new TimesheetExport($data), 'Laporan Pembelian Reseller.xlsx');
         }
     }
 

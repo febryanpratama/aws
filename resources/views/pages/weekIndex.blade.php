@@ -25,7 +25,7 @@
                                     @endif
                                     
                                     @if(count($weeks) >= 2)
-                                    <a href="{{ route('weeks.timesheet', [$month, $year]) }}">
+                                    <a href="{{ route('weeks.timesheetexcel', [$month, $year]) }}">
                                         <button type="button" class="btn btn-danger" >
                                             <i class="feather icon-printer mr-1"></i>
                                             Create Timesheet

@@ -14,7 +14,9 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
-        "pgrimaud/instagram-user-feed": "^6.12"
+        "maatwebsite/excel": "^3.1",
+        "pgrimaud/instagram-user-feed": "^6.12",
+        "phpoffice/phpword": "^0.18.3"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
