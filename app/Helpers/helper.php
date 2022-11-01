@@ -7,36 +7,42 @@ use App\Models\FileOrderReceiver;
 use App\Models\LoginActivity;
 use App\Models\User;
 
-function getFirstName($name){
+function getFirstName($name)
+{
     $explode_space = explode(" ", $name);
     return $explode_space[0];
 }
-function dateTimesheet($date){
+function dateTimesheet($date)
+{
     $explode_minus = explode('-', $date);
     $year = substr($explode_minus[0], 2, 2);
     $month = getMonthCode($explode_minus[1]);
-    return $explode_minus[2].'-'.$month.'-'.$year;
+    return $explode_minus[2] . '-' . $month . '-' . $year;
 }
-function getName($id){
+function getName($id)
+{
     $user = User::findOrFail($id);
     return $user->name;
 }
-function getEsign($id){
+function getEsign($id)
+{
     $user = User::findOrFail($id);
     return $user->esign;
 }
-function getJobTitle($id){
+function getJobTitle($id)
+{
     $user = User::findOrFail($id);
     return $user->job_title;
 }
-function getSize($size){
+function getSize($size)
+{
     $size_in_kb = ceil($size / 1000);
     $size_in_mb = $size / 1048576;
 
     $real_size = $size_in_kb;
     $real_size_type = "KB";
 
-    if($size_in_mb >= 0.1){
+    if ($size_in_mb >= 0.1) {
         $real_size = $size_in_mb;
         $real_size_type = "MB";
     }
@@ -45,77 +51,84 @@ function getSize($size){
 
     return "$real_size $real_size_type";
 }
-function getFileOrderDocuments($id){
-    $fileOrderDocuments = FileOrderDocument::
-                            select('*', 'file_order_documents.id as fileorderdocument_id')
-                            ->join("files", "file_order_documents.file_id", "files.id")
-                            ->join("users", "files.sender_id", "users.id")
-                            ->where("fileorder_id", $id)->get();
+function getFileOrderDocuments($id)
+{
+    $fileOrderDocuments = FileOrderDocument::select('*', 'file_order_documents.id as fileorderdocument_id')
+        ->join("files", "file_order_documents.file_id", "files.id")
+        ->join("users", "files.sender_id", "users.id")
+        ->where("fileorder_id", $id)->get();
     return $fileOrderDocuments;
 }
-function getFileOrderReceivers($id){
+function getFileOrderReceivers($id)
+{
     $fileOrderReceivers = FileOrderReceiver::where("fileorder_id", $id)->get();
     return $fileOrderReceivers;
 }
-function getStatusIcon($status){
-    switch($status){
+function getStatusIcon($status)
+{
+    switch ($status) {
         case "placed":
             return "file";
-        break;
+            break;
         case "process":
             return "clock";
-        break;
+            break;
         case "canceled":
             return "times";
-        break;
+            break;
         case "completed":
             return "check";
-        break;
+            break;
     }
 }
-function getStatusBackground($status){
-    switch($status){
+function getStatusBackground($status)
+{
+    switch ($status) {
         case "placed":
             return "bg-c-red";
-        break;
+            break;
         case "process":
             return "bg-c-blue";
-        break;
+            break;
         case "canceled":
             return "bg-dark";
-        break;
+            break;
         case "completed":
             return "bg-c-green";
-        break;
+            break;
     }
 }
-function getStatusColor($status){
-    switch($status){
+function getStatusColor($status)
+{
+    switch ($status) {
         case "placed":
             return "danger";
-        break;
+            break;
         case "process":
             return "primary";
-        break;
+            break;
         case "canceled":
             return "dark";
-        break;
+            break;
         case "completed":
             return "success";
-        break;
+            break;
     }
 }
-function workingDays($id){
+function workingDays($id)
+{
     $activites = LoginActivity::where("user_id", $id)->where("type", "in")->count();
     return $activites;
 }
 
-function myFiles($id){
+function myFiles($id)
+{
     $files = File::where("sender_id", $id)->count();
     return $files;
 }
 
-function cuaca($wil){
+function cuaca($wil)
+{
     switch ($wil) {
         case "aceh":
         case "banda aceh":
@@ -171,7 +184,7 @@ function cuaca($wil){
         case "kalimantan selatan":
         case "kalsel":
             $url = "?Prov=14&NamaProv=Kalimantan%20Selatan";
-            break;	
+            break;
         case "kalimantan tengah":
         case "kalteng":
             $url = "?Prov=15&NamaProv=Kalimantan%20Tengah";
@@ -260,8 +273,8 @@ function cuaca($wil){
             break;
         case "list":
             $lst = json_encode(array(
-                            "Aceh,Bali,Bangka Belitung,Banten,Bengkulu,DI Yogyakarta,DKI Jakarta,Gorontalo,Jambi,Jawa Barat,Jawa Tengah,Jawa Timur,Kalimantan Barat,Kalimantan Selatan,Kalimantan Tengah,Kalimantan Timur,Kalimantan Utara,Kepulauan Riau,Lampung,Maluku,Maluku Utara,Nusa Tenggara Barat,Nusa Tenggara Timur,Papua,Papua Barat,Riau,Sulawesi Barat,Sulawesi Selatan,Sulawesi Tengah,Sulawesi Tenggara,Sulawesi Utara,Sumatera Barat,Sumatera Selatan,Sumatera Utara,Indonesia"
-                    ));
+                "Aceh,Bali,Bangka Belitung,Banten,Bengkulu,DI Yogyakarta,DKI Jakarta,Gorontalo,Jambi,Jawa Barat,Jawa Tengah,Jawa Timur,Kalimantan Barat,Kalimantan Selatan,Kalimantan Tengah,Kalimantan Timur,Kalimantan Utara,Kepulauan Riau,Lampung,Maluku,Maluku Utara,Nusa Tenggara Barat,Nusa Tenggara Timur,Papua,Papua Barat,Riau,Sulawesi Barat,Sulawesi Selatan,Sulawesi Tengah,Sulawesi Tenggara,Sulawesi Utara,Sumatera Barat,Sumatera Selatan,Sumatera Utara,Indonesia"
+            ));
             return $lst;
             die();
         default:
@@ -269,7 +282,7 @@ function cuaca($wil){
             return $err;
             die();
     }
-                
+
     $html = "http://www.bmkg.go.id/cuaca/prakiraan-cuaca-indonesia.bmkg" . $url;
     $tempat = "";
     $prdom = new DOMDocument;
@@ -280,25 +293,25 @@ function cuaca($wil){
     $tbp = 1;
     $idTab = '//div[@id="TabPaneCuaca' . $tbp . '"]';
     $divTag = $xpath->query($idTab);
-    if($divTag->length == 0){
-        for ($z = 2; $z <= 3; $z++){
+    if ($divTag->length == 0) {
+        for ($z = 2; $z <= 3; $z++) {
             $idTab = '//div[@id="TabPaneCuaca' . $z . '"]';
             $divTag = $xpath->query($idTab);
-            if($divTag->length == 0){
+            if ($divTag->length == 0) {
                 break;
             }
         }
     }
-    
+
     foreach ($divTag as $val) {
         $tempat .= $prdom->saveXML($val);
     }
-    
-    $internalErrors = libxml_use_internal_errors(true);	
+
+    $internalErrors = libxml_use_internal_errors(true);
     $DOM = new DOMDocument();
-    $DOM->loadHTML($tempat);	
-    $xpath = new DOMXPath($DOM);   
-    
+    $DOM->loadHTML($tempat);
+    $xpath = new DOMXPath($DOM);
+
     $Header = $DOM->getElementsByTagName('th');
     $Detail = $DOM->getElementsByTagName('td');
     //struktur table
@@ -307,23 +320,23 @@ function cuaca($wil){
     $head3 =  array("Kota", "Malam", "Dini Hari", "Suhu", "Kelembaban");
     $head4 =  array("Kota", "Dini Hari", "Suhu", "Kelembaban");
     libxml_use_internal_errors($internalErrors);
-    
-    foreach($Header as $NodeHeader){
+
+    foreach ($Header as $NodeHeader) {
         $aDataTableHeaderHTML[] = trim($NodeHeader->textContent);
     }
     @$jmlHeader = count($aDataTableHeaderHTML);
     switch ($jmlHeader) {
-        case 8:					//klo full pagi sampe larut dan 3 hari
+        case 8:                    //klo full pagi sampe larut dan 3 hari
             $head = $head1;
             break;
-        case 7:					//klo - pagi dan 1 hari
+        case 7:                    //klo - pagi dan 1 hari
             $head = $head2;
             break;
-        case 6:					//klo - pagi siang dan 1 hari
+        case 6:                    //klo - pagi siang dan 1 hari
             //echo "Your favorite color is " . $jmlHeader;
             $head = $head3;
             break;
-        case 5:					//klo dini hari doang dan 1 hari
+        case 5:                    //klo dini hari doang dan 1 hari
             $head = $head4;
             break;
         default:
@@ -333,17 +346,17 @@ function cuaca($wil){
     }
     $i = 0;
     $j = 0;
-    foreach($Detail as $sNodeDetail){
+    foreach ($Detail as $sNodeDetail) {
         $aDataTableDetailHTML[$j][] = trim($sNodeDetail->textContent);
         $i = $i + 1;
         $j = $i % count($head) == 0 ? $j + 1 : $j;
     }
-    for($i = 0; $i < count($aDataTableDetailHTML); $i++){
-        for($j = 0; $j < count($head); $j++){
+    for ($i = 0; $i < count($aDataTableDetailHTML); $i++) {
+        for ($j = 0; $j < count($head); $j++) {
             $aTempData[$i][$head[$j]] = $aDataTableDetailHTML[$i][$j];
         }
     }
-    $aDataTableDetailHTML = $aTempData; 
+    $aDataTableDetailHTML = $aTempData;
     unset($aTempData);
     // $js = json_encode($aDataTableDetailHTML);
     // return $js;
@@ -353,13 +366,15 @@ function cuaca($wil){
 
 
 
-function encodeImg($url){
-	$imageData = base64_encode(file_get_contents($url));
-	$src = 'data:image/jpeg;base64,'.$imageData;
-	return $src;
+function encodeImg($url)
+{
+    $imageData = base64_encode(file_get_contents($url));
+    $src = 'data:image/jpeg;base64,' . $imageData;
+    return $src;
 }
 
-function calculateDays($date_start, $date_end){
+function calculateDays($date_start, $date_end)
+{
     $now = strtotime($date_end);
     $your_date = strtotime($date_start);
     $datediff = $now - $your_date;
@@ -367,7 +382,8 @@ function calculateDays($date_start, $date_end){
     return round($datediff / (60 * 60 * 24));
 }
 
-function number_of_working_days($from, $to) {
+function number_of_working_days($from, $to)
+{
     $workingDays = [1, 2, 3, 4, 5]; # date format = N (1 = Monday, ...)
     $holidayDays = ['*-12-25', '*-01-01', '2013-12-23']; # variable and fixed holidays
 
@@ -387,68 +403,156 @@ function number_of_working_days($from, $to) {
     return $days;
 }
 
-function getMonthCode($month){
-    switch($month){
-        case '1': return "Jan"; break;
-        case '2': return "Feb"; break;
-        case '3': return "Mar"; break;
-        case '4': return "Apr"; break;
-        case '5': return "May"; break;
-        case '6': return "Jun"; break;
-        case '7': return "Jul"; break;
-        case '8': return "Aug"; break;
-        case '9': return "Sep"; break;
-        case '10': return "Oct"; break;
-        case '11': return "Sep"; break;
-        case '12': return "Des"; break;
-        default: return "Err"; break;
+function getMonthCode($month)
+{
+    switch ($month) {
+        case '1':
+            return "Jan";
+            break;
+        case '2':
+            return "Feb";
+            break;
+        case '3':
+            return "Mar";
+            break;
+        case '4':
+            return "Apr";
+            break;
+        case '5':
+            return "May";
+            break;
+        case '6':
+            return "Jun";
+            break;
+        case '7':
+            return "Jul";
+            break;
+        case '8':
+            return "Aug";
+            break;
+        case '9':
+            return "Sep";
+            break;
+        case '10':
+            return "Oct";
+            break;
+        case '11':
+            return "Nov";
+            break;
+        case '12':
+            return "Des";
+            break;
+        default:
+            return "Err";
+            break;
     }
 }
-function getFullMonthCode($month){
-    switch($month){
-        case '1': return "January"; break;
-        case '2': return "February"; break;
-        case '3': return "March"; break;
-        case '4': return "April"; break;
-        case '5': return "May"; break;
-        case '6': return "June"; break;
-        case '7': return "July"; break;
-        case '8': return "August"; break;
-        case '9': return "September"; break;
-        case '10': return "October"; break;
-        case '11': return "November"; break;
-        case '12': return "Decemeber"; break;
-        default: return "Error"; break;
+function getFullMonthCode($month)
+{
+    switch ($month) {
+        case '1':
+            return "January";
+            break;
+        case '2':
+            return "February";
+            break;
+        case '3':
+            return "March";
+            break;
+        case '4':
+            return "April";
+            break;
+        case '5':
+            return "May";
+            break;
+        case '6':
+            return "June";
+            break;
+        case '7':
+            return "July";
+            break;
+        case '8':
+            return "August";
+            break;
+        case '9':
+            return "September";
+            break;
+        case '10':
+            return "October";
+            break;
+        case '11':
+            return "November";
+            break;
+        case '12':
+            return "Decemeber";
+            break;
+        default:
+            return "Error";
+            break;
     }
 }
 
-function indonesianDate($date){
-    if($date !== ''){
+function indonesianDate($date)
+{
+    if ($date !== '') {
         $str = "";
-        $delim_space = explode(" ",$date);
-        $delim_minus = explode("-",$delim_space[0]);
-        switch($delim_minus[1]){
-            case '1': $bulan = "Januari"; break;
-            case '2': $bulan = "Februari"; break;
-            case '3': $bulan = "Maret"; break;
-            case '4': $bulan = "April"; break;
-            case '5': $bulan = "Mei"; break;
-            case '6': $bulan = "Juni"; break;
-            case '7': $bulan = "Juli"; break;
-            case '8': $bulan = "Agustus"; break;
-            case '9': $bulan = "September"; break;
-            case '10': $bulan = "Oktober"; break;
-            case '11': $bulan = "September"; break;
-            case '12': $bulan = "Desember"; break;
-            default: $bulan = "Januari"; break;
+        $delim_space = explode(" ", $date);
+        $delim_minus = explode("-", $delim_space[0]);
+        switch ($delim_minus[1]) {
+            case '1':
+                $bulan = "Januari";
+                break;
+            case '2':
+                $bulan = "Februari";
+                break;
+            case '3':
+                $bulan = "Maret";
+                break;
+            case '4':
+                $bulan = "April";
+                break;
+            case '5':
+                $bulan = "Mei";
+                break;
+            case '6':
+                $bulan = "Juni";
+                break;
+            case '7':
+                $bulan = "Juli";
+                break;
+            case '8':
+                $bulan = "Agustus";
+                break;
+            case '9':
+                $bulan = "September";
+                break;
+            case '10':
+                $bulan = "Oktober";
+                break;
+            case '11':
+                $bulan = "November";
+                break;
+            case '12':
+                $bulan = "Desember";
+                break;
+            default:
+                $bulan = "Januari";
+                break;
         }
-        $str .= $delim_minus[2]." ".$bulan." ".$delim_minus[0];
-        if(isset($delim_space[1])){
-            $delim_double_dot = explode(":",$delim_space[1]);
-            $str .= ", ".$delim_double_dot[0].".".$delim_double_dot[1];
+        $str .= $delim_minus[2] . " " . $bulan . " " . $delim_minus[0];
+        if (isset($delim_space[1])) {
+            $delim_double_dot = explode(":", $delim_space[1]);
+            $str .= ", " . $delim_double_dot[0] . "." . $delim_double_dot[1];
         }
-        return $str;        
-    }else{
+        return $str;
+    } else {
         return "";
     }
+}
+function translateLineBreaks($string)
+{
+    $result = nl2br($string);
+
+    // dd($result);
+    return $result;
 }
