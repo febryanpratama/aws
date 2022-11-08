@@ -158,6 +158,32 @@ class HomeController extends Controller
         $data['users'] = User::where("id", "<>", "1")->get();
         return view('pages.userAttendance', $data);
     }
+
+    public function attendanceAdmin(Request $request)
+    {
+        // 
+        // dd($request->all());
+
+        LoginActivity::create([
+            'user_id' => $request->user_id,
+            'user_agent' => 'Windows, Chrome, 106.0.0.0',
+            'ip_address' => '125.160.235.181',
+            'latitude' => '-6.214267',
+            'longitude' => '106.891777',
+            'just_date_in' => $request->just_date_in,
+            'type' => $request->type,
+            'created_at' => $request->just_date_in . " " . $request->time
+        ]);
+
+        $modal = [
+            "modal" => "yes",
+            "modal_title" => "Great!!!",
+            "modal_message" => "Your attendance has been recorded!",
+            "modal_type" => "success",
+        ];
+
+        return back()->with($modal);
+    }
     public function attendanceSearch(Request $request)
     {
 
@@ -197,8 +223,9 @@ class HomeController extends Controller
     {
         // $date_check = Carbon::now()->subDays(1);
         $checkout = LoginActivity::where("user_id", Auth::user()->id)->latest()->first();
-        // dd($chekcout->type);
+        // dd($checkout);
         if ($checkout->type == "in") {
+            // dd("gaga");
             $modal = [
                 "modal" => "yes",
                 "modal_title" => "Ups! Failed..",
@@ -226,9 +253,11 @@ class HomeController extends Controller
 
         $data = $request->except('_token');
         $date_now = date("Y-m-d");
+
         $find = LoginActivity::where("just_date_in", $date_now)->where("user_id", Auth::user()->id)->where("type", "in")->count();
 
-        if ($find == 0 && time() <= strtotime('11am')) {
+        // dd($find);
+        if ($find == 0 && time() <= strtotime('1pm')) {
             $platform = Agent::platform();
             $browser = Agent::browser();
             // dd($browser);
@@ -239,6 +268,7 @@ class HomeController extends Controller
             $data['type'] = "in";
             $data['user_id'] = Auth::user()->id;
             $data['ip_address'] = $request->ip();
+            // dd($date_now);
 
             LoginActivity::create($data);
 
@@ -251,6 +281,7 @@ class HomeController extends Controller
 
             return back()->with($modal);
         } else {
+            // dd("ok");
             $modal = [
                 "modal" => "yes",
                 "modal_title" => "Ups! Failed..",

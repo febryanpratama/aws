@@ -14,6 +14,12 @@
                                     <i class="feather icon-map-pin mr-1"></i>
                                     User Attendance History
                                 </div>
+                                <div>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                        <i class="feather icon-upload mr-1"></i>
+                                        Add Present
+                                    </button>
+                                </div>
                             </h5>
                         </div>
                         <p class="mb-0">GPS-based Website attendance application. Stop leaning on to fingerprint machine and you can track or document it in a simpler, faster way.</p>
@@ -265,6 +271,7 @@
                                 </ul>
                             </div>
                         </div>
+                        {{-- <button class="btn btn-success d-flex justify-content-end">Test</button> --}}
                     </form>
                     <div class="card-body p-0">
                         <div class="table-responsive custom-scroll" style="max-height: 500px;">
@@ -327,6 +334,54 @@
 
 
 
+        </div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Form Absen</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ url("attendance-admin") }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="" class="label-control">User</label>
+                                <select name="user_id" class="form-control">
+                                    <option value="" selected disabled> == Pilih == </option>
+                                    @foreach ($users as $user)
+                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="" class="label-control">Type</label>
+                                <select name="type" class="form-control">
+                                    <option value="" selected disabled> == Pilih == </option>
+                                    <option value="in">Masuk</option>
+                                    <option value="out">Keluar</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="" class="label-control">Date</label>
+                                <input type="date" name="just_date_in" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="" class="label-control">Time</label>
+                                <input type="time" name="time" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                
+                </form>
+                </div>
+            </div>
         </div>
 
     </div>

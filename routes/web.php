@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\IzinController;
+use App\Http\Controllers\ReimburseController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -59,7 +61,20 @@ Route::middleware('CheckLevel:user,admin')->group(function () {
 
     Route::get('weeks/{id}/activity', 'WeekActivityController@index')->name('weeks_activity.index');
     Route::post('weeks/{id}/activity/update', 'WeekActivityController@update')->name('weeks_activity.update');
+
+
+    Route::prefix('mail')->group(function () {
+        Route::get('/', [IzinController::class, 'index'])->name('mail.index');
+        Route::post('/', [IzinController::class, 'store'])->name('mail.store');
+    });
+    Route::prefix('reimburse')->group(function () {
+        Route::get('/', [ReimburseController::class, 'index']);
+        Route::post('/', [ReimburseController::class, 'store']);
+    });
 });
+
+Route::post('attendance-admin', 'HomeController@attendanceAdmin')->name('attendanceAdmin');
+
 
 Route::middleware('CheckLevel:admin')->group(function () {
 
@@ -74,12 +89,15 @@ Route::middleware('CheckLevel:admin')->group(function () {
         Route::post('/{user_id}/update', [UserController::class, 'update'])->name('user.update');
     });
 
+    // Route::group()
+
 
     Route::get('fileOrderReview', 'HomeController@fileOrderReview')->name('fileOrderReview');
     Route::post('fileOrderReview/{id}', 'HomeController@fileOrderReviewPost')->name('fileOrderReviewPost');
     // fileOrderReview
     Route::get('userAttendance', 'HomeController@userAttendance')->name('userAttendance');
     Route::get('attendanceSearch', 'HomeController@attendanceSearch')->name('attendanceSearch');
+    // Route::post('attendance-admin', 'HomeController@attendanceAdmin')->name('attendanceAdmin');
     //     Route::get('fileOrderHistory', 'HomeController@fileOrderHistory')->name('fileOrderHistory');
     //     Route::get('fileOrderCancel/{id}', 'HomeController@fileOrderCancel')->name('fileOrderCancel');
     //     Route::get('fileOrderCompleted/{id}', 'HomeController@fileOrderCompleted')->name('fileOrderCompleted');
