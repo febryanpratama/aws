@@ -84,6 +84,22 @@
                         <span class="pcoded-mtext">File Manager</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('mail.index') }}" class="nav-link {{ (Route::currentRouteName() == 'fileManager' || Route::currentRouteName() == 'fileManagerSearch') ? 'active' : '' }}">
+                        <span class="pcoded-micon">
+                            <i class="feather icon-folder"></i>
+                        </span>
+                        <span class="pcoded-mtext">Mail</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url("reimburse") }}" class="nav-link {{ (Route::currentRouteName() == 'fileManager' || Route::currentRouteName() == 'fileManagerSearch') ? 'active' : '' }}">
+                        <span class="pcoded-micon">
+                            <i class="feather icon-folder"></i>
+                        </span>
+                        <span class="pcoded-mtext">Reimburse</span>
+                    </a>
+                </li>
                 @if(Auth::user()->level == "admin")
                 <li class="nav-item">
                     <a href="{{ route('userAttendance') }}" class="nav-link {{ (Route::currentRouteName() == 'userAttendance') ? 'active' : '' }}">

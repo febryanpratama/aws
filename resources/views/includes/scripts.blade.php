@@ -76,6 +76,7 @@ $.ajax({
 @if(Session::get('modal'))
 <script>
     Swal.fire('{!! Session::get("modal_title") !!}', '{!! Session::get("modal_message") !!}', '{!! Session::get("modal_type") !!}');
+    // Swal.fire('Success', 'Your mail has been Submitted', 'success');
 </script>
 @endif
 
