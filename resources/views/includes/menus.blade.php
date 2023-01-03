@@ -15,75 +15,78 @@
                 </li>
 
 
-                @if(Auth::user()->id <> 1)
-                
-                <li class="nav-item">
-                    <a href="{{ route('weeks.index') }}" class="nav-link {{ (Route::currentRouteName() == 'weeks.index') ? 'active' : '' }}">
-                        <span class="pcoded-micon">
-                            <i class="feather icon-activity"></i>
-                        </span>
-                        <span class="pcoded-mtext">Weekly Working Plan</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('dailyActivities') }}" class="nav-link {{ (Route::currentRouteName() == 'dailyActivities') ? 'active' : '' }}">
-                        <span class="pcoded-micon">
-                            <i class="feather icon-check"></i>
-                        </span>
-                        <span class="pcoded-mtext">My Daily Activities</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('permission.index') }}" class="nav-link {{ (Route::currentRouteName() == 'permission.index') ? 'active' : '' }}">
-                        <span class="pcoded-micon">
-                            <i class="feather icon-mail"></i>
-                        </span>
-                        <span class="pcoded-mtext">My Permission</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('fileOrder') }}" class="nav-link {{ (Route::currentRouteName() == 'fileOrder') ? 'active' : '' }}">
-                        <span class="pcoded-micon">
-                            <i class="feather icon-file"></i>
-                        </span>
-                        <span class="pcoded-mtext">My File Order</span>
-                    </a>
-                </li>
+                @if (auth()->user()->level !== 'manager')
+                    @if(Auth::user()->id <> 1)
+                        <li class="nav-item">
+                            <a href="{{ route('weeks.index') }}" class="nav-link {{ (Route::currentRouteName() == 'weeks.index') ? 'active' : '' }}">
+                                <span class="pcoded-micon">
+                                    <i class="feather icon-activity"></i>
+                                </span>
+                                <span class="pcoded-mtext">Weekly Working Plan</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dailyActivities') }}" class="nav-link {{ (Route::currentRouteName() == 'dailyActivities') ? 'active' : '' }}">
+                                <span class="pcoded-micon">
+                                    <i class="feather icon-check"></i>
+                                </span>
+                                <span class="pcoded-mtext">My Daily Activities</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('permission.index') }}" class="nav-link {{ (Route::currentRouteName() == 'permission.index') ? 'active' : '' }}">
+                                <span class="pcoded-micon">
+                                    <i class="feather icon-mail"></i>
+                                </span>
+                                <span class="pcoded-mtext">My Permission</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('fileOrder') }}" class="nav-link {{ (Route::currentRouteName() == 'fileOrder') ? 'active' : '' }}">
+                                <span class="pcoded-micon">
+                                    <i class="feather icon-file"></i>
+                                </span>
+                                <span class="pcoded-mtext">My File Order</span>
+                            </a>
+                        </li>
+                    @endif
+                    <li class="nav-item">
+                        <a href="{{ route('fileOrderHistory') }}" class="nav-link {{ (Route::currentRouteName() == 'fileOrderHistory') ? 'active' : '' }}">
+                            <span class="pcoded-micon">
+                                <i class="feather icon-file"></i>
+                            </span>
+                            <span class="pcoded-mtext"> My Order File</span>
+                        </a>
+                    </li>
+                    @if(Auth::user()->id == '2')
+                    <li class="nav-item">
+                        <a href="{{ route('fileOrderReview') }}" class="nav-link {{ (Route::currentRouteName() == 'fileOrderReview') ? 'active' : '' }}">
+                            <span class="pcoded-micon">
+                                <i class="feather icon-edit"></i>
+                            </span>
+                            <span class="pcoded-mtext"> My Review</span>
+                        </a>
+                    </li>
+                    @endif
+                    <li class="nav-item">
+                        <a href="{{ route('attendanceHistory') }}" class="nav-link {{ (Route::currentRouteName() == 'attendanceHistory') ? 'active' : '' }}">
+                            <span class="pcoded-micon">
+                                <i class="feather icon-map-pin"></i>
+                            </span>
+                            <span class="pcoded-mtext">My Attendance</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('fileManager') }}" class="nav-link {{ (Route::currentRouteName() == 'fileManager' || Route::currentRouteName() == 'fileManagerSearch') ? 'active' : '' }}">
+                            <span class="pcoded-micon">
+                                <i class="feather icon-folder"></i>
+                            </span>
+                            <span class="pcoded-mtext">File Manager</span>
+                        </a>
+                    </li>
                 @endif
-                <li class="nav-item">
-                    <a href="{{ route('fileOrderHistory') }}" class="nav-link {{ (Route::currentRouteName() == 'fileOrderHistory') ? 'active' : '' }}">
-                        <span class="pcoded-micon">
-                            <i class="feather icon-file"></i>
-                        </span>
-                        <span class="pcoded-mtext"> My Order File</span>
-                    </a>
-                </li>
-                @if(Auth::user()->id == '2')
-                <li class="nav-item">
-                    <a href="{{ route('fileOrderReview') }}" class="nav-link {{ (Route::currentRouteName() == 'fileOrderReview') ? 'active' : '' }}">
-                        <span class="pcoded-micon">
-                            <i class="feather icon-edit"></i>
-                        </span>
-                        <span class="pcoded-mtext"> My Review</span>
-                    </a>
-                </li>
-                @endif
-                <li class="nav-item">
-                    <a href="{{ route('attendanceHistory') }}" class="nav-link {{ (Route::currentRouteName() == 'attendanceHistory') ? 'active' : '' }}">
-                        <span class="pcoded-micon">
-                            <i class="feather icon-map-pin"></i>
-                        </span>
-                        <span class="pcoded-mtext">My Attendance</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('fileManager') }}" class="nav-link {{ (Route::currentRouteName() == 'fileManager' || Route::currentRouteName() == 'fileManagerSearch') ? 'active' : '' }}">
-                        <span class="pcoded-micon">
-                            <i class="feather icon-folder"></i>
-                        </span>
-                        <span class="pcoded-mtext">File Manager</span>
-                    </a>
-                </li>
+
+                @if (auth()->user()->level == 'manager' || auth()->user()->level == 'admin')
                 <li class="nav-item">
                     <a href="{{ route('mail.index') }}" class="nav-link {{ (Route::currentRouteName() == 'fileManager' || Route::currentRouteName() == 'fileManagerSearch') ? 'active' : '' }}">
                         <span class="pcoded-micon">
@@ -100,6 +103,8 @@
                         <span class="pcoded-mtext">Reimburse</span>
                     </a>
                 </li>
+                    
+                @endif
                 @if(Auth::user()->level == "admin")
                 <li class="nav-item">
                     <a href="{{ route('userAttendance') }}" class="nav-link {{ (Route::currentRouteName() == 'userAttendance') ? 'active' : '' }}">

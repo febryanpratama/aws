@@ -39,6 +39,7 @@
                             {{-- @endif --}}
                             {{-- <a href="" class="btn btn-primary btn-sm">
                             </a> --}}
+
                         </div>
                     </div>
                     {{-- {{ dd($files) }} --}}
@@ -85,7 +86,7 @@
                                                 @endswitch
                                             </td>
                                             <td>
-                                                @if (auth()->user()->level == 'admin')
+                                                @if (auth()->user()->level == 'admin' || auth()->user()->level == 'manager')
                                                     <a href="{{ url("mail/".$val->id."/approved") }}" class="btn btn-success btn-sm" title="Approved">
                                                         <i class="feather icon-check"></i>
                                                     </a>

@@ -33,12 +33,12 @@ class UserService
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|same:re-password',
-            'level'     => 'required|in:admin,user'
+            'level'     => 'required|in:admin,user,manager'
         ]);
 
         if ($validator->fails()) {
             # code...
-            // dd($validator->errors());
+            dd($validator->errors()->first());
             return [
                 'status' => false,
                 'message' => $validator->errors()->first(),

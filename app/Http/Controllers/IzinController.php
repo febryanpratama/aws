@@ -12,7 +12,7 @@ class IzinController extends Controller
     public function index()
     {
         // dd(auth()->user());
-        if (auth()->user()->level == 'admin') {
+        if (auth()->user()->level == 'admin' || auth()->user()->level == 'manager') {
             $data = Mail::with('user')->get();
             // return view('pages.izin.index', [
             //     'data' => $data

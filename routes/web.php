@@ -18,7 +18,7 @@ Auth::routes();
 Route::get('test', 'DeveloperController@test')->name('test');
 
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout')->name('logout');
-Route::middleware('CheckLevel:user,admin')->group(function () {
+Route::middleware('CheckLevel:user,admin,manager')->group(function () {
     Route::get('dashboard', 'HomeController@index')->name('dashboard');
     Route::get('fileOrder', 'HomeController@fileOrder')->name('fileOrder');
     Route::post('fileOrder', 'HomeController@fileOrderPost')->name('fileOrderPost');
@@ -71,6 +71,8 @@ Route::middleware('CheckLevel:user,admin')->group(function () {
     });
     Route::prefix('reimburse')->group(function () {
         Route::get('/', [ReimburseController::class, 'index']);
+        Route::get('/{id}/approved', [ReimburseController::class, 'approved'])->name('reimburse.approved');
+        Route::get('/{id}/rejected', [ReimburseController::class, 'rejected'])->name('reimburse.rejected');
         Route::post('/', [ReimburseController::class, 'store']);
     });
 });

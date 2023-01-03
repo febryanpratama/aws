@@ -42,7 +42,13 @@ class UserController extends Controller
         // 
         $result = $this->userService->addUser($request->all());
 
-        return redirect('/user')->withSuccess($result['message']);
+        if ($result['status']) {
+            # code...
+            return redirect()->route('user.index')->with('success', $result['message']);
+        } else {
+            return redirect()->back()->with('error', $result['message']);
+        }
+        // return redirect('/user')->withSuccess($result['message']);
     }
 
     public function edit($user_id)

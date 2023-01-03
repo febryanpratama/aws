@@ -98,6 +98,7 @@
                                         <div class="col-md-8">
                                             <select name="level" class="form-control" required>
                                                 <option value="" selected disabled> == PILIH == </option>
+                                                <option value="manager" {{ @$data->level == 'manager' ? 'selected' : '' }}>Manager</option>
                                                 <option value="admin" {{ @$data->level == 'admin' ? 'selected' : '' }}>Admin</option>
                                                 <option value="user" {{ @$data->level == 'user' ? 'selected' : '' }}>User</option>
                                             </select>
