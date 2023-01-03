@@ -65,6 +65,8 @@ Route::middleware('CheckLevel:user,admin')->group(function () {
 
     Route::prefix('mail')->group(function () {
         Route::get('/', [IzinController::class, 'index'])->name('mail.index');
+        Route::get('/{id}/approved', [IzinController::class, 'approved'])->name('mail.approved');
+        Route::get('/{id}/rejected', [IzinController::class, 'rejected'])->name('mail.rejected');
         Route::post('/', [IzinController::class, 'store'])->name('mail.store');
     });
     Route::prefix('reimburse')->group(function () {
